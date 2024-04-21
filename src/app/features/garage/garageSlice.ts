@@ -7,6 +7,7 @@ interface GarageState {
   isEditing: boolean;
   currentPage: number;
   cars: Car[];
+  isCarsFetched: boolean;
 }
 
 const initialState: GarageState = {
@@ -15,6 +16,7 @@ const initialState: GarageState = {
   currentCar: { ...initialCar },
   currentPage: 1,
   cars: [],
+  isCarsFetched: false,
 };
 
 export const garageSlice = createSlice({
@@ -28,22 +30,32 @@ export const garageSlice = createSlice({
         state.isEditing = true;
       } else {
         // create
-        state.currentCar = { ...initialCar };
         state.isEditing = false;
       }
       state.isOpen = true;
     },
     closeModal(state) {
       state.isOpen = false;
+      if (state.isEditing) {
+        state.currentCar = { ...initialCar };
+      }
+      state.isEditing = false;
     },
     setCurrentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
     },
     setCars(state, action: PayloadAction<Car[]>) {
       state.cars = action.payload;
+      state.isCarsFetched = true;
     },
     setCurrentCar(state, action: PayloadAction<CurrentCarPayload>) {
       state.currentCar[action.payload.key] = action.payload.value;
+    },
+    addNewCar(state, action: PayloadAction<Car>) {
+      state.cars.push(action.payload);
+
+      state.isOpen = false;
+      state.currentCar = { ...initialCar };
     },
     updateCar(state, action: PayloadAction<Car>) {
       const foundIndex = state.cars.findIndex(
@@ -51,15 +63,10 @@ export const garageSlice = createSlice({
       );
       state.cars[foundIndex] = { ...action.payload };
       state.isOpen = false;
+      state.currentCar = { ...initialCar };
     },
     filterCars(state, action: PayloadAction<number>) {
       state.cars = state.cars.filter((c) => c.id !== action.payload);
-    },
-    addNewCar(state, action: PayloadAction<Car>) {
-      state.cars.push(action.payload);
-
-      state.isOpen = false;
-      state.currentCar = { ...initialCar };
     },
   },
 });

@@ -7,7 +7,7 @@ import { filterCars, openModal } from "../garageSlice";
 import { useDeleteCarMutation } from "../garageAPI";
 import { animateCar, getCarImage } from "../../../../utils/utils";
 
-function Car({ car }: { car: Car }) {
+function TheCar({ car }: { car: Car }) {
   const dispatch = useAppDispatch();
   const carRef = useRef<HTMLDivElement>(null);
   const [deleteCar, { isLoading: isDelLoading }] = useDeleteCarMutation();
@@ -67,4 +67,4 @@ function Car({ car }: { car: Car }) {
   );
 }
 
-export default Car;
+export default TheCar;

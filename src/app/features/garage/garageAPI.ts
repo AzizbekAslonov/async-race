@@ -6,7 +6,7 @@ import { Car, CurrentCar } from "./garageTypes";
 // const apiWithAuthTags = api.enhanceEndpoints({ addTagTypes: ['Auth'] });
 export const garageAPI = api.injectEndpoints({
   endpoints: (builder) => ({
-    getCars: builder.query<Car[], void>({
+    getCars: builder.query<Car[], null>({
       query: () => ({
         url: "/garage",
       }),
