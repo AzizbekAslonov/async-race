@@ -1,8 +1,12 @@
 import { List, Skeleton, Typography } from "antd";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { setCars, setCurrentPage } from "../garageSlice";
-import { useGetCarsQuery } from "../garageAPI";
 import { useEffect } from "react";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useGarageContext,
+} from "../../../hooks";
+import { useGetCarsQuery } from "../garageAPI";
+import { setCars, setCurrentPage } from "../garageSlice";
 import TheCar from "./Car";
 
 const CAR_LIMIT = 7;
@@ -13,22 +17,32 @@ function GarageCars() {
   const isCarsFetched = useAppSelector((state) => state.garage.isCarsFetched);
   const dispatch = useAppDispatch();
   const { data, isLoading } = useGetCarsQuery(null, { skip: isCarsFetched });
+  // const { setCarsAnimationStates } = useGarageContext();
 
   useEffect(() => {
     if (data && !isCarsFetched) {
+      // const slicedCars = data.slice((page - 1) * CAR_LIMIT, page * CAR_LIMIT);
+      // setCarsAnimationStates
+      // setCarsAnimationStates(slicedCars);
       dispatch(setCars(data));
     }
   }, [data]);
 
-  const slicedCars = cars.slice((page - 1) * CAR_LIMIT, page * CAR_LIMIT);
+  // useEffect(() => {
+  // return () => {
+  //   dispatch(setAllAnimationStateWaiting());
+  // };
+  // }, []);
 
   return isLoading ? (
     <Skeleton active />
   ) : (
     <List
       bordered
-      renderItem={(item) => <TheCar key={item.id} car={item} />}
-      dataSource={slicedCars}
+      renderItem={(item, index) => (
+        <TheCar key={item.id} index={index} car={item} />
+      )}
+      dataSource={cars.slice((page - 1) * CAR_LIMIT, page * CAR_LIMIT)}
       pagination={{
         className: "text-right",
         showSizeChanger: false,

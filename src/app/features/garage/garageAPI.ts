@@ -1,5 +1,10 @@
 import { api } from "../../api";
-import { Car, CurrentCar } from "./garageTypes";
+import {
+  Car,
+  CurrentCar,
+  PatchEnginePayload,
+  StartEngineResponse,
+} from "./garageTypes";
 // import { PaginatedResponse, ResponseType } from "../types/common.types";
 // import { GetOrderPayload, Order } from "src/pages/orders/order.types";
 
@@ -14,21 +19,42 @@ export const garageAPI = api.injectEndpoints({
     postCar: builder.mutation<Car, CurrentCar>({
       query: (body) => ({
         url: "/garage",
-        method: "post",
+        method: "POST",
         body,
       }),
     }),
     putCar: builder.mutation<Car, { id: number; body: CurrentCar }>({
       query: ({ id, body }) => ({
         url: `/garage/${id}`,
-        method: "put",
+        method: "PUT",
         body,
       }),
     }),
     deleteCar: builder.mutation<{}, number>({
       query: (id) => ({
         url: `/garage/${id}`,
-        method: "delete",
+        method: "DELETE",
+      }),
+    }),
+    startEngine: builder.mutation<StartEngineResponse, number>({
+      query: (id) => ({
+        url: `/engine`,
+        method: "PATCH",
+        params: { id, status: "started" },
+      }),
+    }),
+    driveEngine: builder.mutation<StartEngineResponse, number>({
+      query: (id) => ({
+        url: `/engine`,
+        method: "PATCH",
+        params: { id, status: "drive" },
+      }),
+    }),
+    stopEngine: builder.mutation<StartEngineResponse, number>({
+      query: (id) => ({
+        url: `/engine`,
+        method: "PATCH",
+        params: { id, status: "stopped" },
       }),
     }),
   }),
@@ -39,4 +65,7 @@ export const {
   usePostCarMutation,
   useDeleteCarMutation,
   usePutCarMutation,
+  useStopEngineMutation,
+  useDriveEngineMutation,
+  useStartEngineMutation,
 } = garageAPI;

@@ -40,3 +40,9 @@
   fill-rule: nonzero;
   opacity: 1;
 }
+
+.car-image {
+  /* transition-timing-function: linear;
+  transition-duration: 1000ms; */
+  transform: translateX(0);
+}

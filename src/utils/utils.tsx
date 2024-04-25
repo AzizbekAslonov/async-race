@@ -68,39 +68,28 @@ export const getCarImage = (color: string) => (
 );
 
 export const animateCar = (
-  time: number,
-  carImage: HTMLDivElement
-): Animation => {
-  const carStyle = getComputedStyle(carImage);
-  const parentStyle = getComputedStyle(
-    carImage.closest(".ant-list-item") as HTMLDivElement
-  );
+  animationTime: number,
+  distance: number,
+  id: number
+): { id: number } => {
+  let state = { id: 0 };
+  let start: number | null = null;
+  function step(timestamp: number) {
+    if (!start) start = timestamp;
 
-  const carWidth = parseInt(carStyle.width);
-  const parentWidth = parseInt(parentStyle.width);
-  const carOffset = carImage.offsetLeft;
-
-  const animation = carImage.animate(
-    [
-      { transform: "translateX(0px)" },
-      {
-        transform: `translateX(calc(${parentWidth}px - ${carWidth}px - ${carOffset}px))`,
-      },
-    ],
-    {
-      duration: time,
-      easing: "ease-in-out",
+    const elapsed = timestamp - start;
+    const passed = elapsed * (distance / animationTime);
+    const currentCarImage = document.querySelector(`#car-${id}`) as HTMLElement;
+    if (currentCarImage) {
+      currentCarImage.style.translate = `${Math.min(passed, distance)}px`;
     }
-  );
 
-  console.log(parentWidth);
-  console.log(carWidth);
-  console.log(carOffset);
+    if (passed < distance) {
+      state.id = window.requestAnimationFrame(step);
+    }
+  }
 
-  animation.play();
-  animation.onfinish = (): void => {
-    carImage.style.transform = `translateX(0px))`;
-  };
+  state.id = window.requestAnimationFrame(step);
 
-  return animation;
+  return state;
 };
