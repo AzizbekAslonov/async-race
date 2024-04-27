@@ -27,14 +27,14 @@
 
 #### Car Management (45 points)
 
-- [ ] **CRUD Operations (20 points):** Enable users to create, update, and delete cars, and display the list of cars. A car has two attributes: "name" and "color". For "delete"-operation car should be deleted from "garage" table as well as from "winners".
+- [x] **CRUD Operations (20 points):** Enable users to create, update, and delete cars, and display the list of cars. A car has two attributes: "name" and "color". For "delete"-operation car should be deleted from "garage" table as well as from "winners".
 - [x] **Color Selection (10 points):** Allow color selection from an RGB palette ([like here](https://colorspire.com/rgb-color-wheel/)), displaying the selected color on the car's image along with its name.
 - [x] **Management Buttons (5 points):** Provide buttons near each car's image for updating its attributes or deleting it.
 - [x] **Pagination (10 points):** Implement pagination for the "Garage" view, displaying 7 cars per page.
 
 #### Car Generation (10 points)
 
-- [ ] **Random Car Creation (10 points):** There should be a button to create random cars (100 cars per click). Name should be assembled from two random parts, for example "Tesla" + "Model S", or "Ford" + "Mustang" (At least 10 different names for each part). Color should be also generated randomly.
+- [x] **Random Car Creation (10 points):** There should be a button to create random cars (100 cars per click). Name should be assembled from two random parts, for example "Tesla" + "Model S", or "Ford" + "Mustang" (At least 10 different names for each part). Color should be also generated randomly.
 
 ## 🚗 Car Animation (50 points)
 
@@ -46,9 +46,9 @@
 
 ## 🏎️ Race Animation (35 points)
 
-- [ ] **Start Race Button (15 points):** Implement a button to start the race for all cars on the current page.
-- [ ] **Reset Race Button (10 points):** Create a button to reset the race, returning all cars to their starting positions.
-- [ ] **Winner Announcement (10 points):** After some car finishes first user should see the message contains car's name that shows which one has won.
+- [x] **Start Race Button (15 points):** Implement a button to start the race for all cars on the current page.
+- [x] **Reset Race Button (10 points):** Create a button to reset the race, returning all cars to their starting positions.
+- [x] **Winner Announcement (10 points):** After some car finishes first user should see the message contains car's name that shows which one has won.
 
 ## 🏆 Winners View (45 points)
 

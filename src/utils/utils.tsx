@@ -93,3 +93,48 @@ export const animateCar = (
 
   return state;
 };
+
+export const BRANDS = [
+  "Tesla",
+  "Ford",
+  "Toyota",
+  "Chevrolet",
+  "Honda",
+  "Nissan",
+  "Jeep",
+  "Subaru",
+  "Hyundai",
+  "Kia",
+];
+export const MODELS = [
+  "Model S",
+  "Mustang",
+  "Camry",
+  "Impala",
+  "Civic",
+  "Altima",
+  "Cherokee",
+  "Forester",
+  "Elantra",
+  "Sorento",
+];
+export const COLORS = [
+  "red",
+  "green",
+  "blue",
+  "yellow",
+  "black",
+  "gray",
+  "aqua",
+  "brown",
+  "cornflowerblue",
+  "cyan",
+  "darkblue",
+  "fuchsia",
+  "darkorchid",
+  "darkviolet",
+];
+
+export const getRandomElementFrom = (arr: any[]) => {
+  return arr[Math.floor(Math.random() * arr.length)];
+};

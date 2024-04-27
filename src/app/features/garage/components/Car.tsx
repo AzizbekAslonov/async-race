@@ -5,31 +5,49 @@ import { animateCar, getCarImage } from "../../../../utils/utils";
 import { useAppDispatch, useGarageContext } from "../../../hooks";
 import {
   useDeleteCarMutation,
+  useDeleteWinnerMutation,
   useDriveEngineMutation,
+  useLazyGetWinnerQuery,
+  usePostWinnerMutation,
+  usePutWinnerMutation,
   useStartEngineMutation,
   useStopEngineMutation,
 } from "../garageAPI";
-import { filterCars, openModal, setAnimationState } from "../garageSlice";
+import {
+  filterCars,
+  openModal,
+  setAnimationState,
+  setPageCars,
+  setWinner,
+} from "../garageSlice";
 import { AnimationState, Car, CarAnimation } from "../garageTypes";
+import { store } from "../../../store";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 function TheCar({ car, index }: { car: Car; index: number }) {
   const dispatch = useAppDispatch();
   const carRef = useRef<HTMLDivElement>(null);
-  const { carsAnimationStates } = useGarageContext();
+  const { carsAnimationStates, notificationApi } = useGarageContext();
   const [startEngine, { isLoading: startLoading }] = useStartEngineMutation();
-  const [driveEngine, { isLoading: driveLoading }] = useDriveEngineMutation();
+  const [driveEngine] = useDriveEngineMutation();
   const [stopEngine, { isLoading: stopLoading }] = useStopEngineMutation();
   const [deleteCar, { isLoading: isDelLoading }] = useDeleteCarMutation();
+  const [deleteWinner] = useDeleteWinnerMutation();
+  const [postWinner] = usePostWinnerMutation();
+  const [putWinner] = usePutWinnerMutation();
+  const [getWinner] = useLazyGetWinnerQuery();
 
   const dispatchAnimationState = (value: CarAnimation) => {
     dispatch(setAnimationState({ id: car.id, value }));
   };
 
   const removeCar = () => {
+    deleteWinner(car.id);
     deleteCar(car.id)
       .unwrap()
       .then(() => {
         dispatch(filterCars(car.id));
+        dispatch(setPageCars());
       });
   };
 
@@ -55,35 +73,67 @@ function TheCar({ car, index }: { car: Car; index: number }) {
         startEngine(car.id)
           .unwrap()
           .then(({ distance, velocity }) => {
-            let startTime = performance.now();
+            const animDuration = distance / velocity;
             dispatchAnimationState({ state: AnimationState.Waiting });
 
             // animRef.current = animateCar(
             carsAnimationStates[index].record = animateCar(
-              distance / velocity,
+              animDuration,
               finishDistance,
               car.id
             );
+            let startTime = performance.now();
 
             const driveRequest = driveEngine(car.id);
             carsAnimationStates[index].request = driveRequest;
             driveRequest
               .unwrap()
               .then(() => {
+                // finish
+                if (
+                  store.getState().garage.isRaceStarted &&
+                  !store.getState().garage.winner
+                ) {
+                  const animDurationInSec =
+                    Math.round((animDuration / 1000) * 10) / 10;
+                  notificationApi.success({
+                    message: (
+                      <>
+                        <strong>{car.name} </strong>-
+                        <strong> {animDurationInSec} s</strong>
+                      </>
+                    ),
+                  });
+                  dispatch(setWinner(car));
+                  getWinner(car.id)
+                    .unwrap()
+                    .then((winner) => {
+                      putWinner({ ...winner, wins: winner.wins + 1 });
+                    })
+                    .catch((err: FetchBaseQueryError) => {
+                      if (err.status === 404) {
+                        postWinner({
+                          id: car.id,
+                          time: animDurationInSec,
+                          wins: 1,
+                        });
+                      }
+                    });
+                }
                 dispatchAnimationState({ translateX: finishDistance });
                 delete carsAnimationStates[index].request;
               })
               .catch((err: Error) => {
                 if (err.name !== "AbortError") {
                   // crashed
-                  window.cancelAnimationFrame(
-                    carsAnimationStates[index].record!.id
-                  );
                   dispatchAnimationState({
                     translateX:
                       (performance.now() - startTime) *
                       (finishDistance / (distance / velocity)),
                   });
+                  window.cancelAnimationFrame(
+                    carsAnimationStates[index].record!.id
+                  );
                   delete carsAnimationStates[index].request;
                 }
               });
@@ -91,16 +141,23 @@ function TheCar({ car, index }: { car: Car; index: number }) {
         break;
       case AnimationState.Stopped:
         if (carsAnimationStates[index].request) {
-          // driving case
+          // driving on
           window.cancelAnimationFrame(carsAnimationStates[index].record!.id);
           carsAnimationStates[index].request!.abort();
           delete carsAnimationStates[index].request;
-          stopEngine(car.id);
+          dispatchAnimationState({ translateX: 0 });
+          stopEngine(car.id).then(() => {
+            dispatchAnimationState({
+              state: AnimationState.Initial,
+              translateX: 0,
+            });
+          });
+        } else {
+          dispatchAnimationState({
+            state: AnimationState.Initial,
+            translateX: 0,
+          });
         }
-        dispatchAnimationState({
-          state: AnimationState.Initial,
-          translateX: 0,
-        });
 
         break;
     }
@@ -119,7 +176,7 @@ function TheCar({ car, index }: { car: Car; index: number }) {
           <Button
             disabled={
               car.animation.state === AnimationState.Waiting ||
-              car.animation.state === AnimationState.Started ||
+              startLoading ||
               stopLoading
             }
             onClick={startHandler}
@@ -130,7 +187,9 @@ function TheCar({ car, index }: { car: Car; index: number }) {
           </Button>
           <Button
             disabled={
-              car.animation.state === AnimationState.Initial || startLoading
+              car.animation.state === AnimationState.Initial ||
+              stopLoading ||
+              startLoading
             }
             onClick={stopHandler}
             size="small"

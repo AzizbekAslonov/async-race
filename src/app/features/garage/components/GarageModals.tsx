@@ -1,14 +1,15 @@
 import { Flex, Input, Modal, Typography, notification } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { usePostCarMutation, usePutCarMutation } from "../garageAPI";
 import {
   addNewCar,
-  updateCar,
   closeModal,
   setCurrentCar,
+  setPageCars,
+  updateCar,
 } from "../garageSlice";
-import { usePostCarMutation, usePutCarMutation } from "../garageAPI";
 
-function GarageModal() {
+function GarageModals() {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.garage.isOpen);
   const isEditing = useAppSelector((state) => state.garage.isEditing);
@@ -26,12 +27,14 @@ function GarageModal() {
         .unwrap()
         .then((newCar) => {
           dispatch(updateCar(newCar));
+          dispatch(setPageCars());
         });
     } else {
       postNewCar({ ...currentCar })
         .unwrap()
         .then((newCar) => {
           dispatch(addNewCar(newCar));
+          dispatch(setPageCars());
         });
     }
   };
@@ -39,37 +42,40 @@ function GarageModal() {
   const handleCancel = () => {
     dispatch(closeModal());
   };
+
   return (
-    <Modal
-      title={isEditing ? "Edit car" : "Add car"}
-      open={isOpen}
-      okButtonProps={{ disabled: isLoading || isPutLoading }}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-      <Flex vertical>
-        <div>
-          <Typography.Title level={5}>Enter name</Typography.Title>
-          <Input
-            value={currentCar.name}
-            onChange={(e) =>
-              dispatch(setCurrentCar({ key: "name", value: e.target.value }))
-            }
-          />
-        </div>
-        <div>
-          <Typography.Title level={5}>Pick Color</Typography.Title>
-          <Input
-            onChange={(e) =>
-              dispatch(setCurrentCar({ key: "color", value: e.target.value }))
-            }
-            value={currentCar.color}
-            type="color"
-          />
-        </div>
-      </Flex>
-    </Modal>
+    <>
+      <Modal
+        title={isEditing ? "Edit car" : "Add car"}
+        open={isOpen}
+        okButtonProps={{ disabled: isLoading || isPutLoading }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Flex vertical>
+          <div>
+            <Typography.Title level={5}>Enter name</Typography.Title>
+            <Input
+              value={currentCar.name}
+              onChange={(e) =>
+                dispatch(setCurrentCar({ key: "name", value: e.target.value }))
+              }
+            />
+          </div>
+          <div>
+            <Typography.Title level={5}>Pick Color</Typography.Title>
+            <Input
+              onChange={(e) =>
+                dispatch(setCurrentCar({ key: "color", value: e.target.value }))
+              }
+              value={currentCar.color}
+              type="color"
+            />
+          </div>
+        </Flex>
+      </Modal>
+    </>
   );
 }
 
-export default GarageModal;
+export default GarageModals;

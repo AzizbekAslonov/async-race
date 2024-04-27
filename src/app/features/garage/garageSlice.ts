@@ -16,6 +16,9 @@ interface GarageState {
   cars: Car[];
   isCarsFetched: boolean;
   carPerPage: number;
+  winner: Car | null;
+  isRaceStarted: boolean;
+  pageCars: Car[];
 }
 
 const initialState: GarageState = {
@@ -24,8 +27,11 @@ const initialState: GarageState = {
   currentCar: { ...initialCar },
   currentPage: 1,
   cars: [],
+  pageCars: [],
   isCarsFetched: false,
   carPerPage: 7,
+  winner: null,
+  isRaceStarted: false,
 };
 
 export const garageSlice = createSlice({
@@ -54,28 +60,55 @@ export const garageSlice = createSlice({
       state.currentPage = action.payload;
     },
     setCars(state, action: PayloadAction<Car[]>) {
-      state.cars = action.payload.map((item) => ({
+      state.cars = action.payload;
+      state.isCarsFetched = true;
+    },
+    appendCars(state, action: PayloadAction<Car[]>) {
+      state.cars = state.cars.concat(action.payload);
+    },
+    setPageCars(state, action: PayloadAction<number | undefined>) {
+      if (action.payload) state.currentPage = action.payload;
+      const slidedCars = state.cars.slice(
+        (state.currentPage - 1) * state.carPerPage,
+        state.currentPage * state.carPerPage
+      );
+      state.pageCars = slidedCars.map((car) => {
+        const found = state.pageCars.find((i) => i.id === car.id);
+        if (found) {
+          return { ...car, animation: found.animation };
+        } else {
+          return { ...car, animation: { state: AnimationState.Initial } };
+        }
+      });
+    },
+    setAllAnimationStateWaiting(state) {
+      state.pageCars = state.pageCars.map((item) => ({
         ...item,
         animation: { state: AnimationState.Initial },
       }));
-      state.isCarsFetched = true;
     },
-    setAllAnimationStateWaiting(state) {
-      // state.cars.forEach((item) => {
-      //   if (item.animationState !== "waiting") {
-      //     item.animationState = "other";
-      //   }
-      //   // item.animationState = "waiting";
-      // });
+    startRace(state) {
+      state.winner = null;
+      state.isRaceStarted = true;
+      state.pageCars.forEach((car) => {
+        car.animation.state = AnimationState.Started;
+        car.animation.translateX = null;
+      });
+    },
+    setWinner(state, action: PayloadAction<Car | null>) {
+      state.winner = action.payload;
+    },
+    stopRace(state) {
+      state.isRaceStarted = false;
+      state.pageCars.forEach((car) => {
+        car.animation.state = AnimationState.Stopped;
+      });
     },
     setCurrentCar(state, action: PayloadAction<CurrentCarPayload>) {
       state.currentCar[action.payload.key] = action.payload.value;
     },
     addNewCar(state, action: PayloadAction<Car>) {
-      state.cars.push({
-        ...action.payload,
-        animation: { state: AnimationState.Initial },
-      });
+      state.cars.push(action.payload);
 
       state.isOpen = false;
       state.currentCar = { ...initialCar };
@@ -87,33 +120,27 @@ export const garageSlice = createSlice({
         value: CarAnimation;
       }>
     ) {
-      const foundIndex = state.cars.findIndex(
+      const foundIndex = state.pageCars.findIndex(
         (c) => c.id === action.payload.id
       );
-      state.cars[foundIndex].animation = {
-        ...state.cars[foundIndex].animation,
+      state.pageCars[foundIndex].animation = {
+        ...state.pageCars[foundIndex].animation,
         ...action.payload.value,
       };
     },
     updateCar(state, action: PayloadAction<Car>) {
-      const foundIndex = state.cars.findIndex(
+      const indexInCars = state.cars.findIndex(
         (c) => c.id === action.payload.id
       );
-      state.cars[foundIndex] = { ...action.payload };
+      state.cars[indexInCars] = action.payload;
       state.isOpen = false;
       state.currentCar = { ...initialCar };
     },
-    setCarTranslate(
-      state,
-      action: PayloadAction<{ id: number; value: number }>
-    ) {
-      // const foundIndex = state.cars.findIndex(
-      //   (c) => c.id === action.payload.id
-      // );
-      // state.cars[foundIndex].translateX = action.payload.value;
-    },
     filterCars(state, action: PayloadAction<number>) {
       state.cars = state.cars.filter((c) => c.id !== action.payload);
+      if (state.pageCars.length === 1 && state.currentPage !== 1) {
+        state.currentPage--;
+      }
     },
   },
 });
@@ -125,10 +152,14 @@ export const {
   updateCar,
   setCurrentPage,
   setCars,
+  appendCars,
   addNewCar,
   filterCars,
   setAllAnimationStateWaiting,
-  setCarTranslate,
   setAnimationState,
+  startRace,
+  stopRace,
+  setPageCars,
+  setWinner,
 } = garageSlice.actions;
 export const garageReducer = garageSlice.reducer;

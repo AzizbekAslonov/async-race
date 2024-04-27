@@ -4,6 +4,7 @@ import {
   CurrentCar,
   PatchEnginePayload,
   StartEngineResponse,
+  Winner,
 } from "./garageTypes";
 // import { PaginatedResponse, ResponseType } from "../types/common.types";
 // import { GetOrderPayload, Order } from "src/pages/orders/order.types";
@@ -57,6 +58,31 @@ export const garageAPI = api.injectEndpoints({
         params: { id, status: "stopped" },
       }),
     }),
+    getWinner: builder.query<Winner, number>({
+      query: (id) => ({
+        url: `/winners/${id}`,
+      }),
+    }),
+    postWinner: builder.mutation<Winner, Winner>({
+      query: (body) => ({
+        url: `/winners`,
+        method: "POST",
+        body,
+      }),
+    }),
+    putWinner: builder.mutation<Winner, Winner>({
+      query: ({ id, ...rest }) => ({
+        url: `/winners/${id}`,
+        method: "PUT",
+        body: rest,
+      }),
+    }),
+    deleteWinner: builder.mutation<{}, number>({
+      query: (id) => ({
+        url: `/winners/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -68,4 +94,8 @@ export const {
   useStopEngineMutation,
   useDriveEngineMutation,
   useStartEngineMutation,
+  useLazyGetWinnerQuery,
+  usePutWinnerMutation,
+  usePostWinnerMutation,
+  useDeleteWinnerMutation,
 } = garageAPI;

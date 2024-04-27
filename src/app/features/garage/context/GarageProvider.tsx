@@ -2,8 +2,10 @@ import { ReactElement } from "react";
 import { useAppSelector } from "../../../hooks";
 import { Car } from "../garageTypes";
 import { CarAnimationState, GarageContext } from "./GarageContext";
+import { notification } from "antd";
 
 function GarageProvider({ children }: { children: ReactElement }) {
+  const [notificationApi, contextHolder] = notification.useNotification();
   const carPerPage = useAppSelector((s) => s.garage.carPerPage);
   const carsAnimationStates: CarAnimationState[] = Array.from(
     { length: carPerPage },
@@ -18,8 +20,9 @@ function GarageProvider({ children }: { children: ReactElement }) {
 
   return (
     <GarageContext.Provider
-      value={{ setCarsAnimationStates, carsAnimationStates }}
+      value={{ setCarsAnimationStates, carsAnimationStates, notificationApi }}
     >
+      {contextHolder}
       {children}
     </GarageContext.Provider>
   );

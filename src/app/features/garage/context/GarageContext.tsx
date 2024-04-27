@@ -10,6 +10,7 @@ import {
   MutationDefinition,
 } from "@reduxjs/toolkit/query";
 import { Car, StartEngineResponse } from "../garageTypes";
+import { NotificationInstance } from "antd/es/notification/interface";
 
 export type CarAnimationState = {
   record?: { id: number };
@@ -33,6 +34,7 @@ export type CarAnimationState = {
 export type GarageContextValue = {
   carsAnimationStates: CarAnimationState[];
   setCarsAnimationStates: (slicedCars: Car[]) => void;
+  notificationApi: NotificationInstance;
 };
 
 export const GarageContext = createContext<GarageContextValue | null>(null);

@@ -16,6 +16,12 @@ export type Car = {
   id: number;
   animation: CarAnimation;
 };
+
+export type Winner = {
+  id: number;
+  wins: number;
+  time: number;
+};
 export type CurrentCar = Omit<Car, "id" | "animation"> & { id?: number };
 
 export const initialCar: CurrentCar = { name: "", color: "#000000" };
