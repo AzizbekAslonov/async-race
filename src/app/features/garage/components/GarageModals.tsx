@@ -5,52 +5,52 @@ import {
   addNewCar,
   closeModal,
   setCurrentCar,
-  setPageCars,
-  updateCar,
+  updatePageCars,
+  editExistingCar,
 } from "../garageSlice";
 
 function GarageModals() {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.garage.isOpen);
-  const isEditing = useAppSelector((state) => state.garage.isEditing);
   const currentCar = useAppSelector((state) => state.garage.currentCar);
   const [postNewCar, { isLoading }] = usePostCarMutation();
   const [putCar, { isLoading: isPutLoading }] = usePutCarMutation();
 
-  const handleOk = () => {
+  const okHandler = () => {
     if (!currentCar.name || !currentCar.color) {
       return notification["error"]({ message: "Fill required fields" });
     }
-    if (isEditing) {
+
+    if (currentCar.id) {
       const { id, ...body } = currentCar;
-      putCar({ id: currentCar.id!, body })
+      putCar({ id, body })
         .unwrap()
         .then((newCar) => {
-          dispatch(updateCar(newCar));
-          dispatch(setPageCars());
+          dispatch(editExistingCar(newCar));
+          dispatch(updatePageCars());
         });
     } else {
       postNewCar({ ...currentCar })
         .unwrap()
         .then((newCar) => {
           dispatch(addNewCar(newCar));
-          dispatch(setPageCars());
+          dispatch(updatePageCars());
         });
     }
   };
 
-  const handleCancel = () => {
+  const calcelHandler = () => {
     dispatch(closeModal());
   };
 
   return (
     <>
       <Modal
-        title={isEditing ? "Edit car" : "Add car"}
+        title={currentCar.id ? "Edit car" : "Add car"}
         open={isOpen}
         okButtonProps={{ disabled: isLoading || isPutLoading }}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        onOk={okHandler}
+        onCancel={calcelHandler}
       >
         <Flex vertical>
           <div>

@@ -8,11 +8,11 @@ import { useAppDispatch, useAppSelector } from "../../../hooks";
 import {
   appendCars,
   openModal,
-  setPageCars,
+  updatePageCars,
   startRace,
   stopRace,
 } from "../garageSlice";
-import { AnimationState, Car } from "../garageTypes";
+import { AnimationState, Car } from "../types/garageTypes";
 import { useMemo, useState } from "react";
 import { usePostCarMutation } from "../garageAPI";
 import {
@@ -20,19 +20,19 @@ import {
   COLORS,
   getRandomElementFrom,
   BRANDS,
-} from "../../../../utils/utils";
+} from "../../../../utils/garageUtils";
 
 // Random Car Creation (10 points): There should be a button to create random cars (100 cars per click). Name should be assembled from two random parts, for example "Tesla" + "Model S", or "Ford" + "Mustang" (At least 10 different names for each part). Color should be also generated randomly.
 
 function GarageControl() {
   const dispatch = useAppDispatch();
   const pageCars = useAppSelector((s) => s.garage.pageCars);
-  const [postNewCar, { isLoading }] = usePostCarMutation();
+  const [postNewCar] = usePostCarMutation();
   const [generateBtnDisabled, setGenerateBtnDisabled] = useState(false);
 
   const generateCars = () => {
     setGenerateBtnDisabled(true);
-    const promises = Array.from({ length: 2 }, () => {
+    const promises = Array.from({ length: 100 }, () => {
       return postNewCar({
         color: getRandomElementFrom(COLORS),
         name: `${getRandomElementFrom(BRANDS)} ${getRandomElementFrom(MODELS)}`,
@@ -48,7 +48,7 @@ function GarageControl() {
         }
       });
       dispatch(appendCars(newCars));
-      dispatch(setPageCars());
+      dispatch(updatePageCars());
     });
   };
 
@@ -61,7 +61,7 @@ function GarageControl() {
   };
 
   const isReadyToRace = pageCars.every(
-    (c) => c.animation.state === AnimationState.Initial
+    (c) => c.animation.state === AnimationState.Initial,
   );
 
   const isReadyToStop = useMemo(() => {

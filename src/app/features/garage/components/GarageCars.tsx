@@ -2,11 +2,7 @@ import { List, Skeleton, Typography } from "antd";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { useGetCarsQuery } from "../garageAPI";
-import {
-  setAllAnimationStateWaiting,
-  setCars,
-  setPageCars,
-} from "../garageSlice";
+import { setCars, updatePageCars } from "../garageSlice";
 import TheCar from "./Car";
 
 function GarageCars() {
@@ -23,8 +19,7 @@ function GarageCars() {
   useEffect(() => {
     if (data && !isCarsFetched) {
       dispatch(setCars(data));
-      dispatch(setPageCars());
-      // dispatch(setAllAnimationStateWaiting());
+      dispatch(updatePageCars());
     }
   }, [data]);
 
@@ -43,7 +38,7 @@ function GarageCars() {
         showLessItems: true,
         total: cars.length || 0,
         current: page,
-        onChange: (page) => dispatch(setPageCars(page)),
+        onChange: (page) => dispatch(updatePageCars(page)),
         pageSize: carPerPage,
         showTotal: (total) => (
           <Typography.Title className="m-0" level={4}>
