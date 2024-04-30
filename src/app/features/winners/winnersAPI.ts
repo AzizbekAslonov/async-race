@@ -8,6 +8,7 @@ export const garageAPI = api.injectEndpoints({
         url: "/winners",
         method: "get",
       }),
+      providesTags: ["winners"],
     }),
     getWinner: builder.query<Winner, number>({
       query: (id) => ({

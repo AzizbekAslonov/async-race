@@ -23,12 +23,14 @@ export const garageAPI = api.injectEndpoints({
         method: "PUT",
         body,
       }),
+      invalidatesTags: ["winners"],
     }),
     deleteCar: builder.mutation<{}, number>({
       query: (id) => ({
         url: `/garage/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["winners"],
     }),
     startEngine: builder.mutation<StartEngineResponse, number>({
       query: (id) => ({
