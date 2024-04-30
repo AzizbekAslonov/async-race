@@ -1,4 +1,4 @@
-Link: https://6630ec37ad6fa30bba8e7828--lustrous-madeleine-5016a2.netlify.app/garage
+Link: https://6630ec37ad6fa30bba8e7828--lustrous-madeleine-5016a2.netlify.app
 Score: 405
 
 ## Checklist
