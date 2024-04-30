@@ -71,7 +71,7 @@
 
 ## 📦 Bundling and Tooling (20 points)
 
-- [] **Use of Webpack or Similar (20 points):** Implement Webpack or another bundling tool to compile the project into a minimal set of files, ideally one HTML file, one JS file, and one CSS file. Ensure that the configuration enforces TypeScript strict type checking.
+- [x] **Use of Webpack or Similar (20 points):** Implement Webpack or another bundling tool to compile the project into a minimal set of files, ideally one HTML file, one JS file, and one CSS file. Ensure that the configuration enforces TypeScript strict type checking.
 
 ## ✅ Code Quality and Standards (15 points)
 
