@@ -1,8 +1,11 @@
+Link: https://6630ec37ad6fa30bba8e7828--lustrous-madeleine-5016a2.netlify.app/garage
+Score: 405
+
 ## Checklist
 
 ## 🚀 UI Deployment
 
-- [ ] **Deployment Platform:** Successfully deploy the UI on one of the following platforms: GitHub Pages, Netlify, Vercel, Cloudflare Pages, or a similar service.
+- [x] **Deployment Platform:** Successfully deploy the UI on one of the following platforms: GitHub Pages, Netlify, Vercel, Cloudflare Pages, or a similar service.
 
 ## ✅ Requirements to Commits and Repository
 
@@ -12,7 +15,7 @@
 
 - [x] **Score calculation:** Use this checklist to calculate your score. Check all implemented features, then calculate your score and put it at the top of the `README.md`.
 
-- [ ] **UI Deployment link in README.md**: Place the link to the deployed UI at the top of the README.md file, alongside the calculated score.
+- [x] **UI Deployment link in README.md**: Place the link to the deployed UI at the top of the README.md file, alongside the calculated score.
 
 ## 🏁 Basic Structure (85 points)
 
