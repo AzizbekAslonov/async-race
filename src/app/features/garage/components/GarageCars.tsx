@@ -1,11 +1,17 @@
 import { List, Skeleton, Typography } from "antd";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useEffect, useMemo } from "react";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useGarageContext,
+} from "../../../hooks";
 import { useGetCarsQuery } from "../garageAPI";
 import { setCars, updatePageCars } from "../garageSlice";
 import TheCar from "./Car";
+import { AnimationState } from "../types/garageTypes";
 
 function GarageCars() {
+  const { setCarsAnimationStates } = useGarageContext();
   const page = useAppSelector((state) => state.garage.currentPage);
   const pageCars = useAppSelector((state) => state.garage.pageCars);
   const carPerPage = useAppSelector((state) => state.garage.carPerPage);
@@ -16,12 +22,25 @@ function GarageCars() {
     skip: isCarsFetched,
   });
 
+  const paginateTo = (n: number) => {
+    dispatch(updatePageCars(n));
+    setCarsAnimationStates();
+  };
+
   useEffect(() => {
     if (data && !isCarsFetched) {
       dispatch(setCars(data));
       dispatch(updatePageCars());
     }
   }, [data]);
+
+  const isReadyToRace = pageCars.every((c) => {
+    const { state, translateX } = c.animation;
+    return (
+      state === AnimationState.Initial ||
+      (state === AnimationState.Waiting && translateX !== null)
+    );
+  });
 
   return isLoading ? (
     <Skeleton active />
@@ -33,12 +52,13 @@ function GarageCars() {
       )}
       dataSource={pageCars}
       pagination={{
+        disabled: !isReadyToRace,
         className: "text-right",
         showSizeChanger: false,
         showLessItems: true,
         total: cars.length || 0,
         current: page,
-        onChange: (page) => dispatch(updatePageCars(page)),
+        onChange: paginateTo,
         pageSize: carPerPage,
         showTotal: (total) => (
           <Typography.Title className="m-0" level={4}>

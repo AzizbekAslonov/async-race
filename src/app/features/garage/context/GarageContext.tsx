@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { Car, CarAnimationState } from "../types/garageTypes";
+import { CarAnimationState } from "../types/garageTypes";
 import { NotificationInstance } from "antd/es/notification/interface";
 
 export type GarageContextValue = {
   carsAnimationStates: CarAnimationState[];
-  setCarsAnimationStates: (slicedCars: Car[]) => void;
+  setCarsAnimationStates: () => void;
   notificationApi: NotificationInstance;
 };
 

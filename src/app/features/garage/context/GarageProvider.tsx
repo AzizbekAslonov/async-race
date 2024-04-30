@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
 import { useAppSelector } from "../../../hooks";
-import { Car } from "../types/garageTypes";
 import { GarageContext } from "./GarageContext";
 import { notification } from "antd";
 import { CarAnimationState } from "../types/garageTypes";
@@ -13,10 +12,10 @@ function GarageProvider({ children }: { children: ReactElement }) {
     () => ({})
   );
 
-  const setCarsAnimationStates = (slicedCars: Car[]) => {
-    slicedCars.forEach((_, index) => {
-      carsAnimationStates[index] = {};
-    });
+  const setCarsAnimationStates = () => {
+    for (let i = 0; i < carPerPage; i++) {
+      carsAnimationStates[i] = {};
+    }
   };
 
   return (
