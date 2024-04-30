@@ -21,7 +21,6 @@
   stroke: none;
   stroke-width: 0;
   stroke-dasharray: none;
-  strokelinecap: butt;
   stroke-linejoin: miter;
   stroke-miterlimit: 10;
   fill: none;
@@ -33,7 +32,6 @@
   stroke: none;
   stroke-width: 1;
   stroke-dasharray: none;
-  strokelinecap: butt;
   stroke-linejoin: miter;
   stroke-miterlimit: 10;
   fill: rgb(0, 0, 0);
