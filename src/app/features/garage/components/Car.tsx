@@ -5,15 +5,17 @@ import { useAppDispatch, useGarageContext } from "../../../hooks";
 import { store } from "../../../store";
 import {
   useDriveEngineMutation,
-  useLazyGetWinnerQuery,
-  usePostWinnerMutation,
-  usePutWinnerMutation,
   useStartEngineMutation,
   useStopEngineMutation,
 } from "../garageAPI";
 import { setAnimationState, setHasWinner } from "../garageSlice";
 import { AnimationState, CarAnimation, PageCar } from "../types/garageTypes";
 import CarCRUD from "./CarCRUD";
+import {
+  useLazyGetWinnerQuery,
+  usePostWinnerMutation,
+  usePutWinnerMutation,
+} from "../../winners/winnersAPI";
 
 function TheCar({ car, index }: { car: PageCar; index: number }) {
   const dispatch = useAppDispatch();
@@ -40,14 +42,23 @@ function TheCar({ car, index }: { car: PageCar; index: number }) {
       ),
     });
     dispatch(setHasWinner(true));
+    const commonFields = { id: car.id, name: car.name, color: car.color };
     getWinner(car.id)
       .unwrap()
       .then((winner) => {
-        putWinner({ ...winner, wins: winner.wins + 1 });
+        putWinner({
+          ...commonFields,
+          wins: winner.wins + 1,
+          time: animDurInSec < winner.time ? animDurInSec : winner.time,
+        });
       })
       .catch((err: FetchBaseQueryError) => {
         if (err.status === 404) {
-          postWinner({ id: car.id, time: animDurInSec, wins: 1 });
+          postWinner({
+            ...commonFields,
+            time: animDurInSec,
+            wins: 1,
+          });
         }
       });
   };

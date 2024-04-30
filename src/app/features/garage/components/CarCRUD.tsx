@@ -1,6 +1,7 @@
 import React, { CSSProperties } from "react";
 import { AnimationState, CarAnimation, PageCar } from "../types/garageTypes";
-import { useDeleteCarMutation, useDeleteWinnerMutation } from "../garageAPI";
+import { useDeleteCarMutation } from "../garageAPI";
+import { useDeleteWinnerMutation } from "../../winners/winnersAPI";
 import { useAppDispatch } from "../../../hooks";
 import {
   openModal,

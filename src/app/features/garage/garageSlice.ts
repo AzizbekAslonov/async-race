@@ -54,7 +54,7 @@ export const garageSlice = createSlice({
       if (action.payload) state.currentPage = action.payload;
       const slidedCars = state.cars.slice(
         (state.currentPage - 1) * state.carPerPage,
-        state.currentPage * state.carPerPage,
+        state.currentPage * state.carPerPage
       );
       state.pageCars = slidedCars.map((car) => {
         const found = state.pageCars.find((i) => i.id === car.id);
@@ -93,7 +93,7 @@ export const garageSlice = createSlice({
     },
     setAnimationState(state, action: PayloadAction<SetAnimationStatePayload>) {
       const foundIndex = state.pageCars.findIndex(
-        (c) => c.id === action.payload.id,
+        (c) => c.id === action.payload.id
       );
       state.pageCars[foundIndex].animation = {
         ...state.pageCars[foundIndex].animation,

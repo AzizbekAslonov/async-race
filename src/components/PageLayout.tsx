@@ -1,4 +1,4 @@
-import { Flex, Space, Typography } from "antd";
+import { Flex, Typography } from "antd";
 import Header from "./Header";
 import { ReactNode } from "react";
 

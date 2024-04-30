@@ -1,15 +1,10 @@
-import { Flex } from "antd";
 import PageLayout from "../../../components/PageLayout";
+import WinnersTable from "./components/WinnersTable";
 
 function Winners() {
   return (
     <PageLayout title="Winners">
-      {/* <Flex gap="large" vertical>
-        <WinnersControl />
-        <WinnersModal />
-        <WinnersCars />
-      </Flex> */}
-      Winners
+      <WinnersTable />
     </PageLayout>
   );
 }

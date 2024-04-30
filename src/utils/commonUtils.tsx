@@ -8,10 +8,10 @@ const getActiveColors = (colors: string[]) =>
 export const getButtonConfig = (colors: string[]) => ({
   colorPrimary: `linear-gradient(135deg, ${colors.join(", ")})`,
   colorPrimaryHover: `linear-gradient(135deg, ${getHoverColors(colors).join(
-    ", ",
+    ", "
   )})`,
   colorPrimaryActive: `linear-gradient(135deg, ${getActiveColors(colors).join(
-    ", ",
+    ", "
   )})`,
   lineWidth: 0,
   paddingContentHorizontal: 40,

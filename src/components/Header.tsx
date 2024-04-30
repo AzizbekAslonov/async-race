@@ -1,5 +1,5 @@
 import { Button, ConfigProvider, Flex } from "antd";
-import { getButtonConfig } from "../utils/utils";
+import { getButtonConfig } from "../utils/commonUtils";
 import { Link } from "react-router-dom";
 
 const garageBtnColors = ["#6253E1", "#04BEFE"];

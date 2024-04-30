@@ -11,7 +11,6 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const useGarageContext = (): GarageContextValue => {
   const carsAnimationStates = useContext(GarageContext);
-  //   console.log(carsAnimationStates);
   if (!carsAnimationStates) {
     throw new Error("Error: Wrong context value");
   }

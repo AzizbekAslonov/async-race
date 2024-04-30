@@ -1,36 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Car, CurrentCarPayload, initialCar } from "./winnersTypes";
 
-interface GarageState {
-  isOpen: boolean;
-  currentCar: Car;
-  isEditing: boolean;
+interface WinnersState {
+  pageSize: number;
+  currentPage: number;
 }
 
-const initialState: GarageState = {
-  isOpen: false,
-  isEditing: false,
-  currentCar: { ...initialCar },
+const initialState: WinnersState = {
+  pageSize: 10,
+  currentPage: 1,
 };
 
-export const garageSlice = createSlice({
-  name: "garage",
+export const winnersSlice = createSlice({
+  name: "winners",
   initialState,
   reducers: {
-    openModal(state, action: PayloadAction<Car | undefined>) {
-      if (action.payload) {
-        state.currentCar = action.payload;
-      }
-      state.isOpen = true;
-    },
-    closeModal(state) {
-      state.isOpen = false;
-    },
-    setCurrentCar(state, action: PayloadAction<CurrentCarPayload>) {
-      state.currentCar[action.payload.key] = action.payload.value;
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.currentPage = action.payload;
     },
   },
 });
 
-export const { openModal, closeModal, setCurrentCar } = garageSlice.actions;
-export const garageReducer = garageSlice.reducer;
+export const { setCurrentPage } = winnersSlice.actions;
+export const winnerReducer = winnersSlice.reducer;

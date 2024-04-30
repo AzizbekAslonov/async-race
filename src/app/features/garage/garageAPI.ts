@@ -1,6 +1,6 @@
 import { api } from "../../api";
 import { Car, CurrentCar } from "./types/garageTypes";
-import { StartEngineResponse, Winner } from "./types/garagePayloads";
+import { StartEngineResponse } from "./types/garagePayloads";
 
 // const apiWithAuthTags = api.enhanceEndpoints({ addTagTypes: ['Auth'] });
 export const garageAPI = api.injectEndpoints({
@@ -51,31 +51,6 @@ export const garageAPI = api.injectEndpoints({
         params: { id, status: "stopped" },
       }),
     }),
-    getWinner: builder.query<Winner, number>({
-      query: (id) => ({
-        url: `/winners/${id}`,
-      }),
-    }),
-    postWinner: builder.mutation<Winner, Winner>({
-      query: (body) => ({
-        url: `/winners`,
-        method: "POST",
-        body,
-      }),
-    }),
-    putWinner: builder.mutation<Winner, Winner>({
-      query: ({ id, ...rest }) => ({
-        url: `/winners/${id}`,
-        method: "PUT",
-        body: rest,
-      }),
-    }),
-    deleteWinner: builder.mutation<void, number>({
-      query: (id) => ({
-        url: `/winners/${id}`,
-        method: "DELETE",
-      }),
-    }),
   }),
 });
 
@@ -87,8 +62,4 @@ export const {
   useStopEngineMutation,
   useDriveEngineMutation,
   useStartEngineMutation,
-  useLazyGetWinnerQuery,
-  usePutWinnerMutation,
-  usePostWinnerMutation,
-  useDeleteWinnerMutation,
 } = garageAPI;

@@ -8,11 +8,6 @@ export type SetAnimationStatePayload = {
   id: number;
   value: CarAnimation;
 };
-export type Winner = {
-  id: number;
-  wins: number;
-  time: number;
-};
 
 export type StartEngineResponse = {
   velocity: number;
