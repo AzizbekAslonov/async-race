@@ -1,6 +1,6 @@
 Link: https://dainty-bienenstitch-c1048f.netlify.app
 
-Score: 405
+Score: 350
 
 I just noticed a mini bug. when I edit a car after it wins, it won't change in the winners view. This happens when the car wins again. I could fix it but the deadline is today)
 
