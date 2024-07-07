@@ -1,4 +1,5 @@
 Link to my solution: https://dainty-bienenstitch-c1048f.netlify.app
+
 Link to the task: https://github.com/rolling-scopes-school/tasks/blob/master/epam/async-race.md
 
 Score: 330 out of 405
