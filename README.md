@@ -4,6 +4,8 @@ Link to the task: https://github.com/rolling-scopes-school/tasks/blob/master/epa
 
 Score: 330 out of 405
 
+To run this project locally, you need to install the server from the task repository.
+
 ## Checklist
 
 ## 🚀 UI Deployment
