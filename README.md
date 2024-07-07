@@ -1,8 +1,7 @@
-Link: https://dainty-bienenstitch-c1048f.netlify.app
+Link to my solution: https://dainty-bienenstitch-c1048f.netlify.app
+Link to the task: https://github.com/rolling-scopes-school/tasks/blob/master/epam/async-race.md
 
-Score: 350
-
-I just noticed a mini bug. when I edit a car after it wins, it won't change in the winners view. This happens when the car wins again. I could fix it but the deadline is today)
+Score: 330 out of 405
 
 ## Checklist
 
